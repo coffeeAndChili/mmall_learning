@@ -20,6 +20,7 @@
                     </list>
                 </property>
             </bean>
+            <!-- 此处springMvc  Jackson插件的作用是 使@responseBody标注的方法返回值序列化  -->
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
