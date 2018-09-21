@@ -1,6 +1,7 @@
 package com.mmall.service.impl;
 
 import com.mmall.common.Const;
+import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
@@ -125,6 +126,9 @@ public class UserserviceImpl implements IUserService {
         return ServerResponse.createByErrorMassage("回答错误");
     }
 
+    /**
+     * 修改密码
+     * */
     public ServerResponse<String> forgetRestPassword(String username , String passwordNew , String token){
         //首先验证token
         if(StringUtils.isBlank(token)){
@@ -141,7 +145,7 @@ public class UserserviceImpl implements IUserService {
 
         if(StringUtils.equals(nowToken,token)){
             String md5NewPassword = MD5Util.MD5EncodeUtf8(passwordNew);
-            int resultCount = userMapper.updatePasswordByUsername(username,passwordNew);
+            int resultCount = userMapper.updatePasswordByUsername(username,md5NewPassword);
             if(resultCount>0){
                 return ServerResponse.createBySuccessMessage("修改密码成功");
             }
@@ -187,8 +191,6 @@ public class UserserviceImpl implements IUserService {
         return ServerResponse.createByErrorMassage("更新个人信息失败");
     }
 
-
-
     public ServerResponse<User> getInformation(Integer userId){
         User user = userMapper.selectByPrimaryKey(userId);
         if(null == user){
@@ -199,6 +201,15 @@ public class UserserviceImpl implements IUserService {
         return ServerResponse.createBySuccess(user);
     }
 
+    /**
+     * 校验是否是管理员
+     * */
+    public ServerResponse checkAdminRole(User user){
+        if(user!=null && user.getRole().intValue()== Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
 
 
 

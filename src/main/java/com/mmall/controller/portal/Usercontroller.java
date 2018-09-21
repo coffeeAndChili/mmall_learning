@@ -44,7 +44,7 @@ public class Usercontroller {
     public ServerResponse<User> login(String username , String password , HttpSession session){
         ServerResponse<User> serverResponse = iUserService.login(username,password);
         if(serverResponse.isSuccess()){
-            session.setAttribute(Const.CURRENT_USER,serverResponse);
+            session.setAttribute(Const.CURRENT_USER,serverResponse.getData());
         }
         return serverResponse;
     }
@@ -52,7 +52,7 @@ public class Usercontroller {
     /**
      * 退出功能
      * */
-    @RequestMapping(value = "logout.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "logout.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> logout(HttpSession session){
         session.removeAttribute(Const.CURRENT_USER);
@@ -62,7 +62,7 @@ public class Usercontroller {
     /**
      * 注册
      * */
-    @RequestMapping(value = "register.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "register.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> register(User user){
         return iUserService.register(user);
@@ -71,7 +71,7 @@ public class Usercontroller {
     /**
      * 校验用户名和邮箱
      * */
-    @RequestMapping(value = "check_valid.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "check_valid.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> checkValid(String str,String type){
         return iUserService.checkValid(str,type);
@@ -80,7 +80,7 @@ public class Usercontroller {
     /**
      * 获取用户登录信息接口
      * */
-    @RequestMapping(value = "get_user_info.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "get_user_info.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -93,7 +93,7 @@ public class Usercontroller {
     /**
      * 忘记密码,根据用户名查找密码提示问题
      * */
-    @RequestMapping(value = "forget_get_question.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "forget_get_question.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username){
         return iUserService.selectQuestion(username);
@@ -102,7 +102,7 @@ public class Usercontroller {
     /**
      * 验证问题和答案是否正确
      * */
-    @RequestMapping(value = "forget_check_answer.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "forget_check_answer.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetCheckAnswer(String username ,String question,String answer){
         return iUserService.checkAnswer(username,question,answer);
@@ -111,7 +111,7 @@ public class Usercontroller {
     /**
      * 修改密码
      * */
-    @RequestMapping(value = "forget_rest_password.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "forget_rest_password.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetRestPassword(String username , String passwordNew , String token){
         return iUserService.forgetRestPassword(username,passwordNew,token);
@@ -120,7 +120,7 @@ public class Usercontroller {
     /**
      * 登录状态的重置密码
      * */
-    @RequestMapping(value = "reset_password.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "reset_password.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> resetPassword(HttpSession session , String passwordOld , String passwordNew){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -133,7 +133,7 @@ public class Usercontroller {
     /**
      * 更新个人用户信息
      * */
-    @RequestMapping(value = "update_information.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "update_information.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> updateInformation(HttpSession session ,User user){
         //这里首先判断用户是否登录
@@ -158,7 +158,7 @@ public class Usercontroller {
      * 在更新个人用户信息的时候，首先会先调用获取个人信息的接口，这里判断用户未登录，未强制他登录，所以updateInformation接口就不需要强制登录了
      *
      * */
-    @RequestMapping(value = "get_information.do" , method = RequestMethod.GET)
+    @RequestMapping(value = "get_information.do" , method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> getInformation(HttpSession session){
         //判断用户是否登录，如果未登录需要强制登录
