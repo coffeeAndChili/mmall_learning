@@ -75,6 +75,7 @@ public class ProductManageController {
         if(null==user){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"请先登录");
         }
+        Product product = new Product();
         //验证是否是管理员
         if(iUserService.checkAdminRole(user).isSuccess()){
             //获取产品详情逻辑
